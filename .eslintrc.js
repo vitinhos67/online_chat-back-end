@@ -4,13 +4,12 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: 'airbnb-base',
-  overrides: [
-  ],
+  extends: ['airbnb-base','prettier'],
+  overrides: [],
   parserOptions: {
     ecmaVersion: 'latest',
   },
   rules: {
-    "no-console": false
+    'no-console': 0,
   },
 };

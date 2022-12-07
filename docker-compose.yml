@@ -1,0 +1,10 @@
+# Use postgresDB
+version: "3.1"
+
+services:
+    chat-db:
+        image: postgres
+        environment:
+            POSTGRES_PASSWORD: "senha123"
+        ports:
+            - "5555:5432"
