@@ -6,6 +6,9 @@ const app = express();
 const server = require('http').createServer(app);
 const { Server } = require('socket.io');
 
+const routes = require('./router');
+const errors = require('./src/middleware/error.handler');
+
 const socket = new Server(server, {
   cors: {
     origin: '*',
@@ -15,10 +18,14 @@ const socket = new Server(server, {
 const { create } = require('./src/services/tables.service');
 
 (async () => {
-  const client = await require('./src/database/connection')();
-  await create(client);
+  require('./src/database/connection');
 
+  await create();
+  app.use(express.json());
   app.use(cors());
+
+  app.use(routes);
+  app.use(errors);
 
   socket.on('connection', (clientSocket) => {
     console.log(`Client Connected:${clientSocket.id}`);
