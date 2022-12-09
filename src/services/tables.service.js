@@ -25,11 +25,14 @@ exports.create = async () => {
     if (err) {
       console.log(err);
     }
+    console.log('Tabela criada ou já existente');
   });
 
   await client.query(query[1], (err) => {
     if (err) {
       console.log(err);
     }
+
+    console.log('Tabela criada ou já existente');
   });
 };

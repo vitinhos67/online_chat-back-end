@@ -12,13 +12,18 @@ exports.store = async (req, res, next) => {
       throw new Error('Email invalid');
     }
 
-    const result = await store({
+    await store({
       username,
       password,
       email,
     });
-    console.log(result);
-    res.status(200).json(result);
+    res.status(200).json({
+      username,
+      password,
+      email,
+      access_token: 'dsa',
+      reflesh_token: '',
+    });
   } catch (error) {
     next(error);
   }
@@ -44,9 +49,7 @@ exports.login = async (req, res, next) => {
       throw new Error('Senha invalida');
     }
 
-    return res.status(200).json(
-      user[0],
-    );
+    return res.status(200).json(user[0]);
   } catch (error) {
     next(error);
   }

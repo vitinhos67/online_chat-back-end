@@ -12,5 +12,6 @@ module.exports = {
   rules: {
     'no-console': 0,
     'consistent-return': 0,
+    camelcase: 0,
   },
 };
