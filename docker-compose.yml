@@ -8,3 +8,9 @@ services:
             POSTGRES_PASSWORD: "senha123"
         ports:
             - "5555:5432"
+    cache:
+        image: redis:6.2-alpine
+        restart: always
+        ports:
+            - '6378:6379'
+        command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
