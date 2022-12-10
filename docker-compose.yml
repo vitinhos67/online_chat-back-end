@@ -5,12 +5,11 @@ services:
     chat-db:
         image: postgres
         environment:
-            POSTGRES_PASSWORD: "senha123"
+            POSTGRES_PASSWORD: "${password_pg}"
         ports:
             - "5555:5432"
     cache:
         image: redis:6.2-alpine
-        restart: always
         ports:
             - '6378:6379'
-        command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+        command: redis-server --save 20 1 --loglevel warning --requirepass ${password_redis}

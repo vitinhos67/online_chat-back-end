@@ -21,6 +21,7 @@ const { create } = require('./src/services/tables.service');
 
 (async () => {
   require('./src/database/connection');
+  require('./src/config/redis.connection');
 
   await create();
   app.use(express.json());
