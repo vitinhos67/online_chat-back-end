@@ -7,6 +7,7 @@ exports.create = async () => {
             username VARCHAR(80) NOT NULL,
             email VARCHAR(80) NOT NULL UNIQUE,
             password VARCHAR(200) NOT NULL,
+            description VARCHAR(300), 
             created_at timestamp not null default CURRENT_TIMESTAMP,
             PRIMARY KEY(id)
             );`,

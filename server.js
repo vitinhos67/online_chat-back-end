@@ -9,7 +9,9 @@ const { Server } = require('socket.io');
 const routes = require('./router');
 const errors = require('./src/middleware/error.handler');
 
-const socket = new Server(server, {
+const sockets = new Map();
+
+const io = new Server(server, {
   cors: {
     origin: '*',
     methods: ['GET', 'POST'],
@@ -27,11 +29,15 @@ const { create } = require('./src/services/tables.service');
   app.use(routes);
   app.use(errors);
 
-  socket.on('connection', (clientSocket) => {
-    console.log(`Client Connected:${clientSocket.id}`);
+  io.of('/users').on('connection', (socket) => {
+    socket.on('connectionUser', (data) => {
+      sockets.set(socket.id, data);
+      console.log('Um usuario se conectou');
+    });
 
-    socket.on('message', (msg) => {
-      console.log(msg);
+    socket.on('disconnect', () => {
+      sockets.delete(socket.id);
+      console.log('Usuario se desconectou');
     });
   });
 

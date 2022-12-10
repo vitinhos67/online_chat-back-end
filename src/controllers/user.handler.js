@@ -34,12 +34,10 @@ exports.login = async (req, res, next) => {
 
   try {
     if (!password || !email) {
-      console.log('cheguei aqui');
       throw new Error('body are empty');
     }
 
     if (!validator.isEmail(email)) {
-      console.log(email);
       throw new Error('Email invalid');
     }
 
