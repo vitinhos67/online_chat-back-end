@@ -1,8 +1,7 @@
 const client = require('../config/redis.connection');
 
-exports.setUserOnCache = async (socketId, data) => {
-  const setUser = await client.set(`client:${socketId}`, JSON.stringify(data));
-
+exports.setUserOnCache = async (id, data) => {
+  const setUser = await client.set(`client:${id}`, JSON.stringify(data));
   return setUser;
 };
 

@@ -6,6 +6,7 @@ const app = express();
 const server = require('http').createServer(app);
 const { Server } = require('socket.io');
 const { setUserOnCache, deleteUserOnCache } = require('./src/services/cache.service');
+const { addMessage } = require('./src/services/messages.service');
 const routes = require('./router');
 const errors = require('./src/middleware/error.handler');
 
@@ -29,10 +30,21 @@ const { create } = require('./src/services/tables.service');
   app.use(errors);
 
   io.of('/users').on('connection', (socket) => {
-    
     socket.on('connectionUser', async (data) => {
-      console.log(data);
       await setUserOnCache(data.id, data);
+    });
+
+    socket.on('messageBetweenUsers', async (data) => {
+      const values = {
+        from_username: data.username,
+        from_id: data.user,
+        for_id: data.for_user,
+        message: data.message,
+      };
+
+      await addMessage(values);
+
+      socket.broadcast.emit('receivedMessage', values);
     });
 
     socket.on('disconnect', async () => {
