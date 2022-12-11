@@ -1,5 +1,6 @@
 const validator = require('validator');
 const { store, findUser } = require('../services/user.service');
+const { getUserOnCache } = require('../services/cache.service');
 
 exports.store = async (req, res, next) => {
   const { email, password, username } = req.body;
@@ -48,6 +49,15 @@ exports.login = async (req, res, next) => {
     }
 
     return res.status(200).json(user[0]);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.AllUsersConnectedInChat = async (req, res, next) => {
+  try {
+    const users = await getUserOnCache();
+    res.status(200).json(users);
   } catch (error) {
     next(error);
   }

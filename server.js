@@ -5,11 +5,9 @@ const cors = require('cors');
 const app = express();
 const server = require('http').createServer(app);
 const { Server } = require('socket.io');
-
+const { setUserOnCache, deleteUserOnCache } = require('./src/services/cache.service');
 const routes = require('./router');
 const errors = require('./src/middleware/error.handler');
-
-const sockets = new Map();
 
 const io = new Server(server, {
   cors: {
@@ -31,14 +29,12 @@ const { create } = require('./src/services/tables.service');
   app.use(errors);
 
   io.of('/users').on('connection', (socket) => {
-    socket.on('connectionUser', (data) => {
-      sockets.set(socket.id, data);
-      console.log('Um usuario se conectou');
+    socket.on('connectionUser', async (data) => {
+      await setUserOnCache(socket.id, data);
     });
 
-    socket.on('disconnect', () => {
-      sockets.delete(socket.id);
-      console.log('Usuario se desconectou');
+    socket.on('disconnect', async () => {
+      await deleteUserOnCache(socket.id);
     });
   });
 
