@@ -56,8 +56,8 @@ exports.login = async (req, res, next) => {
 
 exports.AllUsersConnectedInChat = async (req, res, next) => {
   try {
-    const users = await getUserOnCache();
-    res.status(200).json(users);
+    const data = await getUserOnCache();
+    res.status(200).json(data);
   } catch (error) {
     next(error);
   }

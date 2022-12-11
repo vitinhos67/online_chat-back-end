@@ -29,8 +29,10 @@ const { create } = require('./src/services/tables.service');
   app.use(errors);
 
   io.of('/users').on('connection', (socket) => {
+    
     socket.on('connectionUser', async (data) => {
-      await setUserOnCache(socket.id, data);
+      console.log(data);
+      await setUserOnCache(data.id, data);
     });
 
     socket.on('disconnect', async () => {

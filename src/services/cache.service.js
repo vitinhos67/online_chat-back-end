@@ -14,7 +14,7 @@ exports.getUserOnCache = async () => {
   for (let i = 0; i < response.length; i++) {
     // eslint-disable-next-line no-await-in-loop
     const users = await client.get(response[i]);
-    data.push(users);
+    data.push(JSON.parse(users));
   }
 
   return data;
