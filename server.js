@@ -32,6 +32,10 @@ const { create } = require('./src/services/tables.service');
   io.of('/users').on('connection', (socket) => {
     socket.on('connectionUser', async (data) => {
       await setUserOnCache(data.id, data);
+
+      socket.on('disconnect', async () => {
+        await deleteUserOnCache(data.id);
+      });
     });
 
     socket.on('messageBetweenUsers', async (data) => {
@@ -45,10 +49,6 @@ const { create } = require('./src/services/tables.service');
       await addMessage(values);
 
       socket.broadcast.emit('receivedMessage', values);
-    });
-
-    socket.on('disconnect', async () => {
-      await deleteUserOnCache(socket.id);
     });
   });
 
