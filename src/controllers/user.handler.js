@@ -1,5 +1,7 @@
 const validator = require('validator');
-const { store, findUser, findUserByIdDB } = require('../services/user.service');
+const {
+  store, findUser, findUserByIdDB, addDescriptionInProfile,
+} = require('../services/user.service');
 const { getUserOnCache } = require('../services/cache.service');
 
 exports.store = async (req, res, next) => {
@@ -22,8 +24,6 @@ exports.store = async (req, res, next) => {
       username,
       password,
       email,
-      access_token: 'dsa',
-      reflesh_token: '',
     });
   } catch (error) {
     next(error);
@@ -74,6 +74,27 @@ exports.findUserById = async (req, res, next) => {
 
     const data = await findUserByIdDB(id);
     res.status(200).json(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.addDescription = async (req, res, next) => {
+  const { id, description } = req.body;
+  try {
+    if (!id || !description) {
+      throw new Error('Have dates empty');
+    }
+
+    const result = await addDescriptionInProfile({ id, description });
+
+    if (!result) {
+      throw new Error('Um erro inesperado aconteceu.');
+    }
+
+    res.status(200).json({
+      message: 'Descrição adicionada com sucesso.',
+    });
   } catch (error) {
     next(error);
   }

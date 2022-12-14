@@ -48,3 +48,17 @@ exports.findUserByIdDB = async (id) => {
     });
   });
 };
+
+exports.addDescriptionInProfile = async ({ id, description }) => {
+  const query = `UPDATE users SET description = '${description}' where id = ${id};`;
+
+  return new Promise((resolve, reject) => {
+    connection.query(query, (err, result) => {
+      if (err) {
+        reject(err);
+      }
+
+      resolve(result);
+    });
+  });
+};

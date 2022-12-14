@@ -52,6 +52,7 @@ const { create } = require('./src/services/tables.service');
       };
 
       await addMessage(values);
+
       socket.to(users[values.for_id]).emit('receivedMessage', values);
     });
   });

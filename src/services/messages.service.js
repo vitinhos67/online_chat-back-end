@@ -21,36 +21,36 @@ exports.addMessage = async ({
 };
 
 exports.backupMessages = async ({ from_id, for_id }) => {
-  const query = `SELECT from_username,message, created_at FROM messages 
+  const query = `SELECT message, created_at, from_username FROM messages 
   WHERE from_id = $1 AND for_id = $2 
   ORDER BY created_at`;
 
   const user1 = new Promise((resolve, reject) => {
-    connection.query(query, [for_id, from_id], (e, result) => {
-      if (e) {
-        console.log(e);
-        reject(e);
-      }
-
-      if (!result.rowCount) {
-        return resolve(null);
-      }
-
-      resolve(result.rows[0]);
-    });
-  });
-
-  const user2 = new Promise((resolve, reject) => {
     connection.query(query, [from_id, for_id], (e, result) => {
       if (e) {
         console.log(e);
         reject(e);
       }
+
       if (!result.rowCount) {
         return resolve(null);
       }
 
-      resolve(result.rows[0]);
+      resolve(result.rows);
+    });
+  });
+
+  const user2 = new Promise((resolve, reject) => {
+    connection.query(query, [for_id, from_id], (e, result) => {
+      if (e) {
+        console.log(e);
+        reject(e);
+      }
+      if (!result.rowCount) {
+        return resolve(null);
+      }
+
+      resolve(result.rows);
     });
   });
 
