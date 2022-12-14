@@ -29,8 +29,12 @@ const { create } = require('./src/services/tables.service');
   app.use(routes);
   app.use(errors);
 
+  const users = [];
+
   io.of('/users').on('connection', (socket) => {
     socket.on('connectionUser', async (data) => {
+      users[data.id] = socket.id;
+
       await setUserOnCache(data.id, data);
 
       socket.on('disconnect', async () => {
@@ -41,14 +45,14 @@ const { create } = require('./src/services/tables.service');
     socket.on('messageBetweenUsers', async (data) => {
       const values = {
         from_username: data.username,
+        for_username: data.for_username,
         from_id: data.user,
         for_id: data.for_user,
         message: data.message,
       };
 
       await addMessage(values);
-
-      socket.broadcast.emit('receivedMessage', values);
+      socket.to(users[values.for_id]).emit('receivedMessage', values);
     });
   });
 

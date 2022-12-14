@@ -34,3 +34,17 @@ exports.findUser = async (email) => {
     });
   });
 };
+
+exports.findUserByIdDB = async (id) => {
+  const query = `SELECT * FROM users WHERE id = '${id}'`;
+
+  return new Promise((resolve, reject) => {
+    connection.query(query, (err, result) => {
+      if (err) {
+        reject(err);
+      }
+
+      resolve(result.rows[0]);
+    });
+  });
+};

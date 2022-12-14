@@ -1,10 +1,11 @@
-const { addMessage } = require('../services/messages.service');
+const { addMessage, backupMessages } = require('../services/messages.service');
 
 exports.addMessage = async (req, res, next) => {
-  const { from_id, for_id, message } = req.body;
-
+  const {
+    from_id, for_id, message, for_username, from_username,
+  } = req.body;
   try {
-    if (!from_id || !for_id || !message) {
+    if (!from_id || !for_id || !message || !for_username || !from_username) {
       return res.status(400).json({
         message: 'body is empty',
       });
@@ -14,12 +15,31 @@ exports.addMessage = async (req, res, next) => {
       from_id,
       for_id,
       message,
+      for_username,
+      from_username,
     });
 
     res.status(200).json({
       statusCode: 200,
       messgae: 'Mensagem adicionada com sucesso.',
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.backupMessages = async (req, res, next) => {
+  try {
+    const { from_id, for_id } = req.body;
+    const messages = await backupMessages({ from_id, for_id });
+    if (!messages) {
+      res.status(200).json({
+        statusCode: 200,
+        message: 'not_message_found',
+      });
+    }
+
+    res.status(200).json(messages);
   } catch (error) {
     next(error);
   }

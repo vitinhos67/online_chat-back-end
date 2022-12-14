@@ -7,7 +7,7 @@ const client = redis.createClient({
 });
 
 (async () => {
-  client.connect();
+  await client.connect();
 })();
 
 module.exports = client;

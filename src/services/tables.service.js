@@ -13,6 +13,8 @@ exports.create = async () => {
             );`,
     `CREATE TABLE IF NOT EXISTS messages (
             id_message SERIAL NOT NULL PRIMARY KEY,
+            from_username VARCHAR(80) NOT NULL,
+            for_username VARCHAR(80) NOT NULL,
             from_id INT NOT NULL,
             for_id INT NOT NULL,
             message text NOT NULL,
