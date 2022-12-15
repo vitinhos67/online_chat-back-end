@@ -33,8 +33,8 @@ exports.backupMessages = async (req, res, next) => {
     const { from_id, for_id } = req.body;
     const messages = await backupMessages({ from_id, for_id });
     if (!messages) {
-      res.status(200).json({
-        statusCode: 200,
+      res.status(204).json({
+        statusCode: 204,
         message: 'not_message_found',
       });
     }

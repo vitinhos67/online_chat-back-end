@@ -21,14 +21,20 @@ exports.addMessage = async ({
 };
 
 exports.backupMessages = async ({ from_id, for_id }) => {
-  const query = `SELECT message, created_at, from_username FROM messages 
-  WHERE from_id = $1 AND for_id = $2 
-  ORDER BY created_at`;
+  const query = `SELECT username,message,
+  id_message,
+  from_username,
+  for_username,
+  from_id,
+  for_id 
+  FROM messages INNER JOIN users ON messages.from_id = users.id 
+  WHERE (messages.from_id = $1
+  AND messages.for_id = $2) OR (messages.from_id = $2 AND
+  messages.for_id = $1) ORDER BY messages.created_at`;
 
-  const user1 = new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     connection.query(query, [from_id, for_id], (e, result) => {
       if (e) {
-        console.log(e);
         reject(e);
       }
 
@@ -39,26 +45,4 @@ exports.backupMessages = async ({ from_id, for_id }) => {
       resolve(result.rows);
     });
   });
-
-  const user2 = new Promise((resolve, reject) => {
-    connection.query(query, [for_id, from_id], (e, result) => {
-      if (e) {
-        console.log(e);
-        reject(e);
-      }
-      if (!result.rowCount) {
-        return resolve(null);
-      }
-
-      resolve(result.rows);
-    });
-  });
-
-  const data_user_1 = await user1;
-  const data_user_2 = await user2;
-  const messages = {};
-
-  messages[from_id] = data_user_1;
-  messages[for_id] = data_user_2;
-  return messages;
 };
