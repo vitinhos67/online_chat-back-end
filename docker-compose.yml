@@ -8,9 +8,4 @@ services:
             POSTGRES_PASSWORD: "${password_pg}"
         ports:
             - "5555:5432"
-    cache:
-        image: redis:6.2-alpine
-        ports:
-            - '6378:6379'
-        environment:
-            -  REDIS_PASSWORD_VALUE=${REDIS_PASSWORD_VALUE}
+

@@ -29,7 +29,9 @@ exports.findUser = async (email) => {
       if (err) {
         reject(err);
       }
-
+      if (result.rowCount === 0) {
+        resolve('user_not_find');
+      }
       resolve(result.rows);
     });
   });

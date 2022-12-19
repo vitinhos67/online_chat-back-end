@@ -45,8 +45,8 @@ exports.login = async (req, res, next) => {
 
     const user = await findUser(email);
 
-    if (!user) {
-      throw new Error('Usuario nao encontrado');
+    if (user === 'user_not_find') {
+      throw new Error('Usuario não encontrado');
     }
 
     if (user[0].password !== password) {

@@ -36,7 +36,6 @@ const { create } = require('./src/services/tables.service');
       users[data.id] = socket.id;
 
       await setUserOnCache(data.id, data);
-
       socket.on('disconnect', async () => {
         await deleteUserOnCache(data.id);
       });

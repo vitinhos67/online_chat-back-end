@@ -1,9 +1,8 @@
 module.exports = (err, req, res, next) => {
   if (err) {
-    console.log(err);
-
-    return res.status(400).json({
+    return res.status(200).json({
       err: err.message,
+      statusCode: 401,
     });
   }
 
