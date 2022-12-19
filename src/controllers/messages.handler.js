@@ -19,9 +19,9 @@ exports.addMessage = async (req, res, next) => {
       from_username,
     });
 
-    res.status(200).json({
-      statusCode: 200,
-      messgae: 'Mensagem adicionada com sucesso.',
+    res.status(201).json({
+      statusCode: 201,
+      message: 'Mensagem adicionada com sucesso.',
     });
   } catch (error) {
     next(error);

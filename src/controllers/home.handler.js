@@ -1,3 +1,3 @@
 exports.index = (req, res) => {
-  res.status(200).json({ message: '<h1>Hello World</h1>' });
+  res.status(200).send('<h1>Hello World</h1>');
 };

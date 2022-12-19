@@ -3,6 +3,7 @@ const {
   store, findUser, findUserByIdDB, addDescriptionInProfile,
 } = require('../services/user.service');
 const { getUserOnCache } = require('../services/cache.service');
+const { signAccessToken, singRefleshToken } = require('../functions/jwt');
 
 exports.store = async (req, res, next) => {
   const { email, password, username } = req.body;
@@ -52,7 +53,13 @@ exports.login = async (req, res, next) => {
       throw new Error('Senha invalida');
     }
 
-    return res.status(200).json(user[0]);
+    const access_token = signAccessToken(user[0]);
+    const reflesh_token = singRefleshToken(user[0]);
+
+    return res.status(200).json({
+      access_token,
+      reflesh_token,
+    });
   } catch (error) {
     next(error);
   }
@@ -80,13 +87,14 @@ exports.findUserById = async (req, res, next) => {
 };
 
 exports.addDescription = async (req, res, next) => {
-  const { id, description } = req.body;
+  const { user } = req;
+  const { description } = req.body;
   try {
-    if (!id || !description) {
+    if (!user || !description) {
       throw new Error('Have dates empty');
     }
 
-    const result = await addDescriptionInProfile({ id, description });
+    const result = await addDescriptionInProfile({ id: user.id, description });
 
     if (!result) {
       throw new Error('Um erro inesperado aconteceu.');
@@ -94,6 +102,20 @@ exports.addDescription = async (req, res, next) => {
 
     res.status(200).json({
       message: 'Descrição adicionada com sucesso.',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.dataUser = async (req, res, next) => {
+  const { user } = req;
+
+  try {
+    res.status(200).json({
+      username: user.username,
+      id: user.id,
+      description: user.description,
     });
   } catch (error) {
     next(error);
