@@ -41,7 +41,7 @@ const { create } = require('./src/services/tables.service');
       });
     });
 
-    socket.on('messageBetweenUsers', async (data) => {
+    socket.on('userSendMessage', async (data) => {
       const values = {
         from_username: data.username,
         for_username: data.for_username,
